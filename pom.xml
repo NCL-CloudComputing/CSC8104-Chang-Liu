@@ -143,6 +143,7 @@
   </build>
   <profiles>
     <profile>
+
       <id>native</id>
       <activation>
         <property>
@@ -153,6 +154,30 @@
         <skipITs>false</skipITs>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
+      <repositories>
+        <repository>
+          <id>jboss-temp-repository</id>
+          <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-temp-plugin-repository</id>
+          <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
     </profile>
   </profiles>
 </project>
