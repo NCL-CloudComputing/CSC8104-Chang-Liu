@@ -17,6 +17,7 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL, query = "SELECT b FROM Booking b"),
+        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL_BY_CUSTOMER, query = "SELECT b.customer_email FROM Booking b LEFT JOIN Customer c")
         //@NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_EMAIL, query = "SELECT b FROM Booking b WHERE b.email = :email")
 })
 @XmlRootElement
@@ -28,7 +29,8 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String FIND_ALL = "Booking.findAll";
-   // public static final String FIND_BY_EMAIL = "Booking.findByEmail";
+    public static final String FIND_ALL_BY_CUSTOMER ="Booking.findAllByCustomer" ;
+    // public static final String FIND_BY_EMAIL = "Booking.findByEmail";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

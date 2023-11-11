@@ -19,8 +19,8 @@ import java.util.Objects;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.hotel.Hotel.FIND_ALL, query = "SELECT c FROM Hotel c ORDER BY c.hotelName ASC"),
-        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.hotel.Hotel.FIND_BY_TEL, query = "SELECT c FROM Hotel c WHERE c.hotelTel = :hotelTel")
+        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.hotel.Hotel.FIND_ALL, query = "SELECT h FROM Hotel h ORDER BY h.hotelName ASC"),
+        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.hotel.Hotel.FIND_BY_TEL, query = "SELECT h FROM Hotel h WHERE h.hotelTel = :hotelTel")
 })
 @XmlRootElement
 @Table(name = "hotel", uniqueConstraints = @UniqueConstraint(columnNames = "hotel_tel"))
@@ -35,6 +35,7 @@ public class Hotel implements Serializable {
 
 
     @Id
+    @Column(name = "hotel_id")
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long hotelId;
 

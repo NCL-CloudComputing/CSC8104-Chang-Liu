@@ -23,6 +23,7 @@ public interface AreaService {
     List<Area> getAreas();
 
 
+
     @GET
     @Path("/{id:[0-9]+}")
     Area getAreaById(@PathParam("id") int id);
