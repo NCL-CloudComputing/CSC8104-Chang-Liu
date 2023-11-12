@@ -229,7 +229,7 @@ public class BookingRestService {
         }
 
         if (booking.getBookingId() != null && booking.getBookingId() !=bookingId) {
-            // The client attempted to update the read-only Id. This is not permitted.
+            // The client attempted to update the read-only bookingId. This is not permitted.
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("id", "The Booking ID in the request body must match that of the Booking being updated");
             throw new RestServiceException("Booking details supplied in request body conflict with another Booking",
@@ -265,10 +265,6 @@ public class BookingRestService {
             responseObj.put("booking", "That booking is already exist");
             throw new RestServiceException("Booking details supplied in request body conflict with another Booking",
                     responseObj, Response.Status.CONFLICT, e);
-        } catch (InvalidAreaCodeException e) {
-            Map<String, String> responseObj = new HashMap<>();
-            responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");
-            throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, e);
         } catch (Exception e) {
             // Handle generic exceptions
             throw new RestServiceException(e);

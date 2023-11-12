@@ -149,11 +149,7 @@ public class HotelRestService {
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("hotelTel", "That hotel telephone number is already used, please use a unique phoneNumber");
             throw new RestServiceException("Bad Request", responseObj, Response.Status.CONFLICT, e);
-        } catch (InvalidAreaCodeException e) {
-            Map<String, String> responseObj = new HashMap<>();
-            responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");
-            throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, e);
-        } catch (Exception e) {
+         } catch (Exception e) {
             // Handle generic exceptions
             throw new RestServiceException(e);
         }
@@ -194,7 +190,7 @@ public class HotelRestService {
         }
 
         if (hotel.getHotelId() != null && hotel.getHotelId() != hotelId) {
-            // The client attempted to update the read-only Id. This is not permitted.
+            // The client attempted to update the read-only hotelId. This is not permitted.
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("id", "The hotel ID in the request body must match that of the Hotel being updated");
             throw new RestServiceException("Hotel details supplied in request body conflict with another Hotel",
