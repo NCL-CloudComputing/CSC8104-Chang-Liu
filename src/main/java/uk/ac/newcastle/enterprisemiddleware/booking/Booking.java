@@ -20,9 +20,9 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL, query = "SELECT b FROM Booking b"),
-        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL_BY_CUSTOMER, query = "SELECT b,c FROM Booking b LEFT JOIN Customer c on c.customerId=b.customerId WHERE c.customerId=:customerId"),
-        @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_HOTEL_AND_BOOKINGDATE,query = "SELECT b FROM Booking b WHERE b.hotelId=:hotelId and b.bookingDate = :bookingDate"),
-        @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_CUSTOMER_ID,query ="SELECT b FROM Booking b Where b.customerId=:customerId")
+        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL_BY_CUSTOMER, query = "SELECT b,c FROM Booking b LEFT JOIN Customer c on c.customerId=b.customer.customerId WHERE c.customerId=:customerId"),
+        @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_HOTEL_AND_BOOKINGDATE,query = "SELECT b FROM Booking b WHERE b.hotel.hotelId=:hotelId and b.bookingDate = :bookingDate"),
+        @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_CUSTOMER_ID,query ="SELECT b FROM Booking b Where b.customer.customerId=:customerId")
                 //@NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_EMAIL, query = "SELECT b FROM Booking b WHERE b.email = :email")
 })
 @XmlRootElement
