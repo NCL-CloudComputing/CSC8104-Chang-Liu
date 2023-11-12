@@ -27,8 +27,8 @@ import java.util.logging.Logger;
  * @create: 2023-11-11 22:44
  **/
 @Dependent
-@Path("/hotelBooking")
-@RegisterRestClient(configKey = "hotelBooking-api")
+//@Path("/hotelBooking")
+//@RegisterRestClient(configKey = "hotelBooking-api")
 public class BookingService {
     @Inject
     @Named("logger")
