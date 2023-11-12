@@ -24,15 +24,15 @@ public class CustomerService {
     @Inject
     CustomerValidator customerValidator;
 
-    List<Customer> findAllOrderedByName() {
+    public List<Customer> findAllOrderedByName() {
         return customerRepository.findAllOrderedByName();
     }
 
-    Customer findById(Long customerId) {
+    public Customer findById(Long customerId) {
         return customerRepository.findById(customerId);
     }
 
-    Customer findByEmail(String customer_email){ return customerRepository.findByEmail(customer_email);}
+    public Customer findByEmail(String customer_email){ return customerRepository.findByEmail(customer_email);}
     public Customer createCustomer(Customer customer) throws Exception
     {
         log.info("CustomerService.create() - Creating" + customer.getFirstName()+customer.getLastName());

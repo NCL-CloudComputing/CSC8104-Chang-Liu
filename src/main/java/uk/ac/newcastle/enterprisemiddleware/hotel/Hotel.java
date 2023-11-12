@@ -1,6 +1,9 @@
 package uk.ac.newcastle.enterprisemiddleware.hotel;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import uk.ac.newcastle.enterprisemiddleware.booking.Booking;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -8,6 +11,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @program: CSC8104-Chang-Liu
@@ -54,6 +58,18 @@ public class Hotel implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9]{6}$")
     @Column(name = "postcode")
     private String postcode;
+
+    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<Booking> bookings;
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
 
     public Long getHotelId() {
         return hotelId;

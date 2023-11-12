@@ -202,7 +202,7 @@ public class ContactRestService {
             // Handle the unique constraint violation
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("email", "That email is already used, please use a unique email");
-            throw new RestServiceException("Bad Request", responseObj, Response.Status.CONFLICT, e);
+            throw new RestServiceException("Bad Req qASuest", responseObj, Response.Status.CONFLICT, e);
         } catch (InvalidAreaCodeException e) {
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");

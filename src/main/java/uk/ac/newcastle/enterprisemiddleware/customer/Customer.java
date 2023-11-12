@@ -1,11 +1,15 @@
 package uk.ac.newcastle.enterprisemiddleware.customer;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import uk.ac.newcastle.enterprisemiddleware.booking.Booking;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @program: CSC8104-Chang-Liu
@@ -56,6 +60,26 @@ public class Customer implements Serializable {
     @Pattern(regexp = "^0[0-9]{10}")
     @Column(name = "customer_tel")
     private String customerTel;
+
+    @OneToMany(mappedBy = "customer",cascade = {CascadeType.REMOVE})
+    @JsonIgnore
+    private Set<Booking> bookings;
+
+    public String getCustomer_email() {
+        return customer_email;
+    }
+
+    public void setCustomer_email(String customer_email) {
+        this.customer_email = customer_email;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
 
     public Long getCustomerId() {
         return customerId;
