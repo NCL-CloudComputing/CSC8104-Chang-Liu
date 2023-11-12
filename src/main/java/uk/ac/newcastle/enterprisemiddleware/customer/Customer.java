@@ -54,7 +54,8 @@ public class Customer implements Serializable {
     @NotNull
     @NotEmpty
     @Email(message = "The email address must be in the format of name@domain.com")
-    private String customer_email;
+    @Column(name = "customer_email")
+    private String customerEmail;
 
     @NotNull
     @Pattern(regexp = "^0[0-9]{10}")
@@ -64,22 +65,6 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer",cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private Set<Booking> bookings;
-
-    public String getCustomer_email() {
-        return customer_email;
-    }
-
-    public void setCustomer_email(String customer_email) {
-        this.customer_email = customer_email;
-    }
-
-    public Set<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
-    }
 
     public Long getCustomerId() {
         return customerId;
@@ -106,11 +91,11 @@ public class Customer implements Serializable {
     }
 
     public String getCustomerEmail() {
-        return customer_email;
+        return customerEmail;
     }
 
-    public void setCustomerEmail(String email) {
-        this.customer_email = email;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public String getCustomerTel() {
@@ -121,17 +106,24 @@ public class Customer implements Serializable {
         this.customerTel = customerTel;
     }
 
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Customer)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return customer_email.equals(customer.customer_email);
+        return Objects.equals(customerId, customer.customerId) && Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName) && Objects.equals(customerEmail, customer.customerEmail) && Objects.equals(customerTel, customer.customerTel) && Objects.equals(bookings, customer.bookings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(customer_email);
+        return Objects.hash(customerId, firstName, lastName, customerEmail, customerTel, bookings);
     }
-
 }
