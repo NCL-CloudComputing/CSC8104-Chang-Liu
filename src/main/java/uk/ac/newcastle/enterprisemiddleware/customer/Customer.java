@@ -20,7 +20,7 @@ import java.util.Set;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Customer.FIND_ALL, query = "SELECT c FROM Customer c ORDER BY c.lastName ASC, c.firstName ASC"),
-        @NamedQuery(name = Customer.FIND_BY_EMAIL, query = "SELECT c FROM Customer c WHERE c.customer_email = :email")
+        @NamedQuery(name = Customer.FIND_BY_EMAIL, query = "SELECT c FROM Customer c WHERE c.customerEmail = :email")
 })
 @XmlRootElement
 @Table(name = "customer", uniqueConstraints = @UniqueConstraint(columnNames = "customer_email"))
