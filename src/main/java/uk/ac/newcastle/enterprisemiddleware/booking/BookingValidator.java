@@ -10,7 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
-import java.util.Date;
+import java.util.Date;4
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,25 +37,25 @@ public class BookingValidator {
         }
 
         // Check the uniqueness of the email address
-        if (bookingAlreadyExists(booking,booking.getHotelId())) {
+        if (bookingAlreadyExists(booking.getBookingDate(),booking.getHotel(),booking.getBookingId())) {
             throw new UniqueBookingException("UniqueBooking Violation");
         }
     }
 
-    boolean  bookingAlreadyExists(Booking booking, Long hotelId) {
-        Booking booking1 = null;
+    boolean  bookingAlreadyExists(Date futureDate ,Hotel hotel,Long BookingId) {
+        Booking booking = null;
         Booking bookingWithID = null;
 
         try {
-            booking = bookingRepository.findByCustomerId(booking.getCustomerId());
+            booking = bookingRepository.findByHotelIdAndBookingDate(hotel,futureDate);
         } catch (NoResultException e) {
             // ignore
         }
 
-        if (booking != null && booking.getHotelId() != null) {
+        if (booking != null && BookingId != null) {
             try {
-                bookingWithID = bookingRepository.findByHotelIdAndBookingDate(hotelId,booking.getBookingDate());
-                if (bookingWithID != null) {
+                bookingWithID = bookingRepository.findById(BookingId);
+                if (bookingWithID != null && bookingWithID.getHotel().getHotelId().equals(hotel.getHotelId())&&bookingWithID.getBookingDate().equals(futureDate)) {
                     booking = null;
                 }
             } catch (NoResultException e) {

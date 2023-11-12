@@ -48,8 +48,8 @@ public class BookingService {
         return bookingRepository.findById(bookingId);
     }
 
-    Booking findByHotelIdAndBookingDate(Long hotelID, Date bookingDate) {
-        return bookingRepository.findByHotelIdAndBookingDate(hotelID, bookingDate);
+    Booking findByHotelIdAndBookingDate(Hotel hotel, Date bookingDate) {
+        return bookingRepository.findByHotelIdAndBookingDate(hotel, bookingDate);
     }
     Booking findByCustomerId(Long customerId){
         return bookingRepository.findByCustomerId(customerId);

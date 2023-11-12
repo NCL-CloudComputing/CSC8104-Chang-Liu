@@ -39,10 +39,10 @@ public class BookingRepository {
     Booking findById(Long bookingId){
         return em.find(Booking.class,bookingId);
     }
-    Booking findByHotelIdAndBookingDate(Long hotelId, Date bookingDate)
+    Booking findByHotelIdAndBookingDate(Hotel hotel, Date bookingDate)
     {
         Query query = em.createNamedQuery(Booking.FIND_BY_HOTEL_AND_BOOKINGDATE,Booking.class)
-                .setParameter("hotelId", hotelId)
+                .setParameter("hotelId", hotel.getHotelId())
                 .setParameter("bookingDate", bookingDate);
         return  (Booking) query.getSingleResult();
     }
@@ -54,7 +54,7 @@ public class BookingRepository {
 
     }
     Booking createBooking(Booking booking) throws Exception{
-        log.info("HotelBookingRepository.create() - Booking"+ " "+booking.getHotelId()+" "+booking.getCustomerId()+" "+booking.getBookingDate());
+        log.info("HotelBookingRepository.create() - Booking"+ " "+booking.getHotel()+" "+booking.getHotel()+" "+booking.getBookingDate());
 
         em.persist(booking);
 
