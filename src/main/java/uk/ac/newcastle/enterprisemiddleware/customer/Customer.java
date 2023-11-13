@@ -28,14 +28,14 @@ public class Customer implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will.
      **/
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1234567L;
 
     public static final String FIND_ALL = "Customer.findAll";
     public static final String FIND_BY_EMAIL = "Customer.findByEmail";
 
     //pirmary key：customer_id
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="customer_id")
     private Long customerId;
 
@@ -119,11 +119,11 @@ public class Customer implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(customerId, customer.customerId) && Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName) && Objects.equals(customerEmail, customer.customerEmail) && Objects.equals(customerTel, customer.customerTel) && Objects.equals(bookings, customer.bookings);
+        return Objects.equals(customerEmail, customer.customerEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, firstName, lastName, customerEmail, customerTel, bookings);
+        return Objects.hash(customerEmail);
     }
 }

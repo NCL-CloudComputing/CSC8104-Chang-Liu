@@ -32,7 +32,7 @@ public class Hotel implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will.
      **/
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID =  12345678L;
 
     public static final String FIND_ALL = "Hotel.findAll";
     public static final String FIND_BY_TEL = "Hotel.findByTel";
@@ -40,7 +40,7 @@ public class Hotel implements Serializable {
 
     @Id
     @Column(name = "hotel_id")
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hotelId;
 
     @NotNull
@@ -105,14 +105,14 @@ public class Hotel implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Hotel)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Hotel hotel = (Hotel) o;
-        return hotel.equals(hotel.hotelTel);
+        return Objects.equals(hotelTel, hotel.hotelTel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(hotelTel);
+        return Objects.hash(hotelTel);
     }
 
 }

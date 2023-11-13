@@ -9,6 +9,7 @@ import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.customer.CustomerService;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
 import uk.ac.newcastle.enterprisemiddleware.hotel.HotelService;
+import uk.ac.newcastle.enterprisemiddleware.util.RestServiceException;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -46,13 +47,15 @@ public class BookingService {
     @Inject
     BookingValidator bookingValidator;
 
-
+    public List<Booking> findAllBookings(){
+        return bookingRepository.findAllBookings();
+    }
     /**
      * <p>Returns a List of all Booking objects, sorted alphabetically by customerId.<p/>
      *
      * @return List of Contact objects
      */
-    List<Booking> findAllBookingsByCustomer(Customer customer){
+    public List<Booking> findAllBookingsByCustomer(Customer customer){
         return bookingRepository.findAllBookingsByCustomer(customer);
     }
     /**
@@ -61,7 +64,7 @@ public class BookingService {
      * @param bookingId The id field of the Contact to be returned
      * @return The Contact with the specified id
      */
-    Booking findById(Long bookingId) {
+    public Booking findById(Long bookingId) {
         return bookingRepository.findById(bookingId);
     }
 
@@ -74,7 +77,7 @@ public class BookingService {
      * @create 2023/11/10
      */
 
-    Booking findByHotelIdAndBookingDate(Hotel hotel, Date bookingDate) {
+    public Booking findByHotelIdAndBookingDate(Hotel hotel, Date bookingDate) {
         return bookingRepository.findByHotelIdAndBookingDate(hotel, bookingDate);
     }
 
@@ -86,7 +89,7 @@ public class BookingService {
      * @create 2023/11/11
      */
 
-    Booking findByCustomerId(Long customerId){
+    public Booking findByCustomerId(Long customerId){
         return bookingRepository.findByCustomerId(customerId);
     }
 
@@ -97,14 +100,27 @@ public class BookingService {
      * @author Chang Liu
      * @create 2023/11/12
      */
-    Booking createBooking(Booking booking) throws Exception {
+    public Booking createBooking(Booking booking) throws Exception {
         log.info("HotelBookingService.createBooking() - Creating " + booking.getHotel() + " " + booking.getCustomer());
 
+        Long customerId = booking.getCustomer().getCustomerId();
+        Customer customer = customerService.findById(customerId);
+
+        Long hotelId=booking.getHotel().getHotelId();
+        Hotel hotel=hotelService.findById(hotelId);
+        Date bookingDate = booking.getBookingDate();
+        Booking booking1=new Booking();
+        booking1.setBookingDate(bookingDate);
+        booking1.setHotel(hotel);
+        booking1.setCustomer(customer);
+        System.out.println(booking1);
+
+
         // Check to make sure the data fits with the parameters in the Booking model and passes validation.
-        bookingValidator.validateBooking(booking);
+        bookingValidator.validateBooking(booking1);
 
         // Write the contact to the database.
-        return bookingRepository.createBooking(booking);
+        return bookingRepository.createBooking(booking1);
     }
     /**
      * @description
@@ -114,7 +130,7 @@ public class BookingService {
      * @create 2023/11/12
      */
 
-    Booking updateBooking(Booking booking)throws Exception{
+    public Booking updateBooking(Booking booking)throws Exception{
         log.info("HotelBookingService.creatBooking() - Create " + booking.getHotel() + " " + booking.getCustomer());
 
         // Check to make sure the data fits with the parameters in the Booking model and passes validation.
@@ -130,17 +146,16 @@ public class BookingService {
      * @create 2023/11/12
      */
 
-    Booking deleteBooking(Booking booking) throws Exception {
-        log.info("delete() - Deleting " + booking.toString());
+    public Booking deleteBooking(Long bookingId) throws Exception {
+        log.info("delete() - Deleting " + bookingId);
 
-        Booking deleteBooking =null;
-        if(booking.getBookingId()!=null){
-            deleteBooking=bookingRepository.deleteBooking(booking);
+        Booking booking = bookingRepository.findById(bookingId);
+        System.out.println(booking);
+        if (booking == null) {
+            throw new RestServiceException("No booking with ID" + bookingId + "found");
         }
-        else {
-            log.info("delete() - No ID was found so can't Delete.");
-        }
-        return deleteBooking;
+
+        return bookingRepository.deleteBooking(booking);
     }
 
 }

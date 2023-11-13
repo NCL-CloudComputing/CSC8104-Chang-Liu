@@ -7,6 +7,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.reactive.Cache;
 import uk.ac.newcastle.enterprisemiddleware.area.InvalidAreaCodeException;
+import uk.ac.newcastle.enterprisemiddleware.contact.Contact;
 import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.customer.CustomerService;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
@@ -55,7 +56,23 @@ public class BookingRestService {
     @Inject
     HotelService hotelService;
 
+/**
+ * @description: find all bookings information
+ * @return javax.ws.rs.core.Response
+ * @author Chang Liu
+ * @create 2023/11/13
+ */
 
+    @GET
+    @Operation(summary = "Fetch all Bookings", description = "Returns a JSON array of all stored Contact objects.")
+    public Response retrieveAllContacts() {
+        //Create an empty collection to contain the intersection of Contacts to be returned
+        List<Booking> bookingList;
+
+        bookingList=bookingService.findAllBookings();
+
+        return Response.ok(bookingList).build();
+    }
     /**
      * @description:通过customerId找这个人的预定信息list
      * @Param id:
@@ -133,6 +150,7 @@ public class BookingRestService {
 
         return Response.ok(booking).build();
     }
+
     /**
      * @description：新增预定信息
      * @Param
@@ -183,11 +201,7 @@ public class BookingRestService {
             // Handle the unique constraint violation
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("booking", "That booking is already exist");
-            throw new RestServiceException("Bad Req qASuest", responseObj, Response.Status.CONFLICT, e);
-        } catch (InvalidAreaCodeException e) {
-            Map<String, String> responseObj = new HashMap<>();
-            responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");
-            throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, e);
+            throw new RestServiceException("Bad Request", responseObj, Response.Status.CONFLICT, e);
         } catch (Exception e) {
             // Handle generic exceptions
             throw new RestServiceException(e);
@@ -295,19 +309,17 @@ public class BookingRestService {
             @Parameter(description = "Id of Booking to be deleted", required = true)
             @Schema(minimum = "0")
             @PathParam("bookingId")
-            long bookingId,
-            @Parameter(description = "JSON representation of Booking object to be updated in the database", required = true)
-            Booking booking) {
+            Long bookingId) {
 
         Response.ResponseBuilder builder;
 
-        if (booking.getBookingId() == null||bookingService.findById(bookingId)==null) {
+        if (bookingId == null||bookingService.findById(bookingId)==null) {
             // Verify that the Booking exists. Return 404, if not present.
             throw new RestServiceException("No Booking with the id " + bookingId + " was found!", Response.Status.NOT_FOUND);
         }
 
         try {
-            bookingService.deleteBooking(booking);
+            bookingService.deleteBooking(bookingId);
 
             builder = Response.noContent();
 

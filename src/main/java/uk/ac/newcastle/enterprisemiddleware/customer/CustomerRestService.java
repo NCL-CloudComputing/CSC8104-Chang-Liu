@@ -153,7 +153,7 @@ public class CustomerRestService {
         }
 
         if (customer.getCustomerId() != null && customer.getCustomerId() != id) {
-            // The client attempted to update the read-only Id. This is not permitted.
+            // The client attempted to update the read-only customerId. This is not permitted.
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("id", "The Customer ID in the request body must match that of the Customer being updated");
             throw new RestServiceException("Customer details supplied in request body conflict with another Customer",

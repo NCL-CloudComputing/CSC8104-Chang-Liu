@@ -43,12 +43,12 @@ public class HotelValidator {
     }
 
 
-    boolean phoneNumberAlreadyExists(String phonenumber, Long id) {
+    boolean phoneNumberAlreadyExists(String hotelTel, Long id) {
         Hotel hotel = null;
         Hotel hotelWithID = null;
 
         try {
-            hotel = hotelRepository.findByHotelTel(phonenumber);
+            hotel = hotelRepository.findByHotelTel(hotelTel);
         } catch (NoResultException e) {
             // ignore
         }
@@ -56,7 +56,7 @@ public class HotelValidator {
         if (hotel != null && id != null) {
             try {
                 hotelWithID = hotelRepository.findById(id);
-                if (hotelWithID != null && hotelWithID.getHotelTel().equals(phonenumber)) {
+                if (hotelWithID != null && hotelWithID.getHotelTel().equals(hotelTel)) {
                     hotel = null;
                 }
             } catch (NoResultException e) {

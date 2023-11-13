@@ -46,7 +46,7 @@ public class HotelRepository {
         log.info("HotelRepository.create() - Creating"+hotel.getHotelName());
 
         em.persist(hotel);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         return hotel;
     }
     Hotel updateHotel(Hotel hotel) throws Exception{

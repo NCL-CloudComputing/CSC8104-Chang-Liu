@@ -30,14 +30,26 @@ public class BookingRepository {
     @Inject
     EntityManager em;
 
+
+    List<Booking> findAllBookings()
+    {
+        TypedQuery<Booking> namedQuery = em.createNamedQuery(Booking.FIND_ALL, Booking.class);
+        return namedQuery.getResultList();
+    }
     List<Booking> findAllBookingsByCustomer(Customer customer)
     {
         TypedQuery<Booking> namedQuery = em.createNamedQuery(Booking.FIND_ALL_BY_CUSTOMER, Booking.class)
                 .setParameter("customerId",customer.getCustomerId());
         return namedQuery.getResultList();
     }
-    Booking findById(Long bookingId){
-        return em.find(Booking.class,bookingId);
+    Booking findById(Long id){
+        return em.find(Booking.class,id);
+    }
+    Booking findByBookingId(Long bookingId)
+    {
+        Query query = em.createNamedQuery(Booking.FIND_BY_BOOKING_ID,Booking.class)
+                .setParameter("bookingId", bookingId);
+        return  (Booking) query.getSingleResult();
     }
     Booking findByHotelIdAndBookingDate(Hotel hotel, Date bookingDate)
     {

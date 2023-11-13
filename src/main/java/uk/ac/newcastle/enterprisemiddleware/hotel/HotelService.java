@@ -25,18 +25,18 @@ public class HotelService {
     @Inject
     HotelValidator hotelValidator;
 
-    List<Hotel> findAllOrderedByHotelName() {
+    public List<Hotel> findAllOrderedByHotelName() {
         return hotelRepository.findAllByHotelName();
     }
 
-    Hotel findById(Long hotelId) {
+    public Hotel findById(Long hotelId) {
         return hotelRepository.findById(hotelId);
     }
-    Hotel findByHotelTel(String hotelTel){
+    public Hotel findByHotelTel(String hotelTel){
         return hotelRepository.findByHotelTel(hotelTel);
     }
 
-    Hotel createHotel(Hotel hotel)throws Exception
+    public Hotel createHotel(Hotel hotel)throws Exception
     {
         logger.info("HotelService.create - Creating"+hotel.getHotelName());
 

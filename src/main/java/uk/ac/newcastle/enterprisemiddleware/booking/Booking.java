@@ -20,40 +20,45 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL, query = "SELECT b FROM Booking b"),
-        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL_BY_CUSTOMER, query = "SELECT b,c FROM Booking b LEFT JOIN Customer c on c.customerId=b.customer.customerId WHERE c.customerId=:customerId"),
+        @NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_ALL_BY_CUSTOMER, query = "SELECT b FROM Booking b Where b.customer.customerId=:customerId"),
         @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_HOTEL_AND_BOOKINGDATE,query = "SELECT b FROM Booking b WHERE b.hotel.hotelId=:hotelId and b.bookingDate = :bookingDate"),
+        @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_BOOKING_ID,query ="SELECT b FROM Booking b Where b.bookingId=:bookingId"),
+
         @NamedQuery(name=uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_CUSTOMER_ID,query ="SELECT b FROM Booking b Where b.customer.customerId=:customerId")
                 //@NamedQuery(name = uk.ac.newcastle.enterprisemiddleware.booking.Booking.FIND_BY_EMAIL, query = "SELECT b FROM Booking b WHERE b.email = :email")
 })
 @XmlRootElement
-
-//这个表中不允许重复的是什么？
-@Table(name = "booking", uniqueConstraints = @UniqueConstraint(columnNames = "booking_id"))
+@Table(name = "booking", uniqueConstraints = @UniqueConstraint(columnNames = {"booking_date","hotel_id"}))
 public class Booking implements Serializable {
     /** Default value included to remove warning. Remove or modify at will. **/
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1123548L;
 
     public static final String FIND_ALL = "Booking.findAll";
     public static final String FIND_ALL_BY_CUSTOMER ="Booking.findAllByCustomer" ;
     // public static final String FIND_BY_EMAIL = "Booking.findByEmail";
     public static final String FIND_BY_HOTEL_AND_BOOKINGDATE="Booking.findByHotelAndBookingDate";
     public static final String FIND_BY_CUSTOMER_ID="Booking.findByCustomerId";
+    public static final String FIND_BY_BOOKING_ID="Booking.findByBookingId";
+
+
+
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id" )
     private Long bookingId;
 
-    @ManyToOne() //表示级练操作
-    @JoinColumn(name = "customer_id")
+    @ManyToOne()
+    @JoinColumn(name = "customer_id",referencedColumnName = "customer_id")
     @NotNull
     private Customer customer;
-    @ManyToOne(cascade = CascadeType.ALL) //表示级练操作
-    @JoinColumn(name = "hotel_Id")
+
+    @ManyToOne()
+    @JoinColumn(name = "hotel_Id",referencedColumnName = "hotel_Id")
     @NotNull
     private Hotel hotel;
 
     @NotNull
-    @Past(message = "bookingDate can not be in the past. Please choose one from the future")
+    @Future(message = "bookingDate can not be in the past. Please choose one from the future")
     @Column(name = "booking_date")
     @Temporal(TemporalType.DATE)
     private Date bookingDate;
@@ -95,11 +100,20 @@ public class Booking implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Booking booking = (Booking) o;
-        return Objects.equals(bookingId, booking.bookingId) && Objects.equals(customer, booking.customer) && Objects.equals(hotel, booking.hotel) && Objects.equals(bookingDate, booking.bookingDate);
+        return Objects.equals(hotel, booking.hotel) && Objects.equals(bookingDate, booking.bookingDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookingId, customer, hotel, bookingDate);
+        return Objects.hash(hotel, bookingDate);
+    }
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", customer=" + customer +
+                ", hotel=" + hotel +
+                ", bookingDate=" + bookingDate +
+                '}';
     }
 }

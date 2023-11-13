@@ -62,11 +62,12 @@ public class ContactValidator {
      *
      * @param email The email to check is unique
      * @param id The user id to check the email against if it was found
-     * @return boolean which represents whether the email was found, and if so if it belongs to the user with id
+     * @return boolean which represents whether the email was found, and if so it belongs to the user with id
      */
     boolean emailAlreadyExists(String email, Long id) {
         Contact contact = null;
         Contact contactWithID = null;
+
         try {
             contact = crud.findByEmail(email);
         } catch (NoResultException e) {
