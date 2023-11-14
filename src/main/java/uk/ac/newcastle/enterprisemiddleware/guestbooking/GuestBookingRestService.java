@@ -9,6 +9,7 @@ import uk.ac.newcastle.enterprisemiddleware.booking.BookingService;
 import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.customer.CustomerService;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
+import uk.ac.newcastle.enterprisemiddleware.travelAgent.BookingVO;
 import uk.ac.newcastle.enterprisemiddleware.util.RestServiceException;
 
 import javax.ejb.Stateless;
@@ -74,16 +75,22 @@ public class GuestBookingRestService {
         }
 
         try {
-
             userTransaction.begin();
-
-            Customer customer = guestBooking.getCustomer();
+            System.out.println(guestBooking.toString());
+            Customer customer1 = customerService.createCustomer(guestBooking.getCustomer());
             Booking booking = guestBooking.getBooking();
-            customerService.createCustomer(customer);
-            bookingService.createBooking(booking);
+
+            booking.setCustomer(customer1);
+            BookingVO booking1 = new BookingVO();
+            booking1.setHotelId(booking.getHotel().getHotelId());
+            booking1.setCustomerId(booking.getCustomer().getCustomerId());
+            booking1.setBookingDate(booking.getBookingDate());
+
+
+            bookingService.createBooking(booking1);
             userTransaction.commit();
 
-            builder =  Response.status(Response.Status.CREATED).entity("Create GustBooking successfully!").build();
+            builder =  Response.status(Response.Status.CREATED).entity(booking1).build();
 
         } catch (Exception e) {
             try {
