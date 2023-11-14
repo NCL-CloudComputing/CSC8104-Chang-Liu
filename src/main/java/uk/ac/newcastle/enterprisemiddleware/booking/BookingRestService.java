@@ -12,6 +12,7 @@ import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.customer.CustomerService;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
 import uk.ac.newcastle.enterprisemiddleware.hotel.HotelService;
+import uk.ac.newcastle.enterprisemiddleware.travelAgent.BookingVO;
 import uk.ac.newcastle.enterprisemiddleware.util.RestServiceException;
 
 import javax.inject.Inject;
@@ -169,7 +170,7 @@ public class BookingRestService {
             @APIResponse(responseCode = "500", description = "An unexpected error occurred whilst processing the request")
     })
     @Transactional
-    public Response createBooking(@Parameter(description = "JSON representation of Booking object to be added to the database", required = true) Booking booking) {
+    public Response createBooking(@Parameter(description = "JSON representation of Booking object to be added to the database", required = true) BookingVO booking) {
 
         if (booking == null) {
             throw new RestServiceException("Bad Request", Response.Status.BAD_REQUEST);
@@ -179,7 +180,7 @@ public class BookingRestService {
 
         try {
             // Clear the ID if accidentally set
-            booking.setBookingId(null);
+            booking.setId(null);
 
             // Go add the new Booking.
             bookingService.createBooking(booking);

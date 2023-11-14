@@ -31,4 +31,11 @@ public class GuestBooking {
         this.customer = customer;
     }
 
+    @Override
+    public String toString() {
+        return "GuestBooking{" +
+                "booking=" + booking +
+                ", customer=" + customer +
+                '}';
+    }
 }

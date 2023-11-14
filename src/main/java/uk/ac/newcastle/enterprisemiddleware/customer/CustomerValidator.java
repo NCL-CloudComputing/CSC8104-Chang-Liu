@@ -27,7 +27,8 @@ public class CustomerValidator {
 
     @Inject
     CustomerRepository customerRepository;
-    void validateCustomer(Customer customer) throws ConstraintViolationException, ValidationException {
+    public void validateCustomer(Customer customer) throws ConstraintViolationException, ValidationException {
+        System.out.println(customer);
         // Create a bean validator and check for issues.
         Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 

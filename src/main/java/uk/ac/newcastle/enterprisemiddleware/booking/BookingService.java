@@ -9,6 +9,7 @@ import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.customer.CustomerService;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
 import uk.ac.newcastle.enterprisemiddleware.hotel.HotelService;
+import uk.ac.newcastle.enterprisemiddleware.travelAgent.BookingVO;
 import uk.ac.newcastle.enterprisemiddleware.util.RestServiceException;
 
 import javax.enterprise.context.Dependent;
@@ -100,13 +101,13 @@ public class BookingService {
      * @author Chang Liu
      * @create 2023/11/12
      */
-    public Booking createBooking(Booking booking) throws Exception {
-        log.info("HotelBookingService.createBooking() - Creating " + booking.getHotel() + " " + booking.getCustomer());
+    public BookingVO createBooking(BookingVO booking) throws Exception {
+        log.info("HotelBookingService.createBooking() - Creating " + booking.getHotelId() + " " + booking.getCustomerId());
 
-        Long customerId = booking.getCustomer().getCustomerId();
+        Long customerId = booking.getCustomerId();
         Customer customer = customerService.findById(customerId);
 
-        Long hotelId=booking.getHotel().getHotelId();
+        Long hotelId=booking.getHotelId();
         Hotel hotel=hotelService.findById(hotelId);
         Date bookingDate = booking.getBookingDate();
         Booking booking1=new Booking();
@@ -119,8 +120,14 @@ public class BookingService {
         // Check to make sure the data fits with the parameters in the Booking model and passes validation.
         bookingValidator.validateBooking(booking1);
 
+        Booking booking2 = bookingRepository.createBooking(booking1);
+
+        BookingVO bookingVO = new BookingVO(booking2);
+
+
+
         // Write the contact to the database.
-        return bookingRepository.createBooking(booking1);
+        return bookingVO;
     }
     /**
      * @description
