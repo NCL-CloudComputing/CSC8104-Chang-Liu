@@ -42,6 +42,18 @@ public class TravelAgentRestService {
     @RestClient
     HotelBookingService hotelBookingService;
 
+    @Inject
+    @RestClient
+    TaxiBookingService taxiBookingService;
+
+    /**
+     * @description: Add a new TravelAgent to the database
+     * @Param travelAgent:
+     * @return javax.ws.rs.core.Response
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
+
 @POST
 @Operation(description = "Add a new TravelAgent to the database")
 @APIResponses(value = {
@@ -63,9 +75,12 @@ public Response TravelAgent(
     try {
 
         Long hotelBookingId = travelAgentService.creatHotelBooking(travelAgent);
-
+        Long taxiBookingId = travelAgentService.creatTaxiBooking(travelAgent);
+        //Long flightBookingId = travelAgentService.creatFlightBooking(travelAgent);
         System.out.println("----------------"+hotelBookingId+"----------------------------");
         travelAgent.setHotelBookingId(hotelBookingId);
+        travelAgent.setTaxiBookingId(taxiBookingId);
+        //travelAgent.setFlightBookingId(flightBookingId);
         TravelAgent travelAgent1 = travelAgentService.createTravelAgent(travelAgent);
 
         builder = Response.status(Response.Status.CREATED).entity(travelAgent);
@@ -73,7 +88,7 @@ public Response TravelAgent(
     } catch (Exception e) {
         travelAgentService.deleteTravelAgent(travelAgent.getId());
         hotelBookingService.deleteBooking(travelAgent.getId());
-        //taxiBookingService.deleteBooking(taxiBookingId);
+        taxiBookingService.deleteBooking(travelAgent.getId());
         //flightBookingService.deleteBooking(flightBookingId);
         throw new RestServiceException(e);
     }
@@ -81,6 +96,14 @@ public Response TravelAgent(
     logger.info("create travelAgent completed. TravelAgent = " + travelAgent);
     return builder.build();
 }
+/**
+ * @description: Delete a TravelAgent from the database
+ * @Param id
+ * @return javax.ws.rs.core.Response
+ * @author Chang Liu
+ * @create 2023/11/14
+ */
+
     @DELETE
     @Path("/{id:[0-9]+}")
     @Operation(description = "Delete a TravelAgent from the database")
@@ -103,7 +126,10 @@ public Response TravelAgent(
         }
         try {
             travelAgentService.deleteTravelAgent(id);
+
             hotelBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getHotelBookingId());
+            taxiBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getTaxiBookingId());
+            //flightBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getFlightBookingId());
             builder = Response.noContent();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -113,8 +139,7 @@ public Response TravelAgent(
     }
 
 /**
- * @description
-
+ * @description: Fetch all TravelAgent
  * @return javax.ws.rs.core.Response
  * @author Chang Liu
  * @create 2023/11/14
