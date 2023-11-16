@@ -1,7 +1,9 @@
 package uk.ac.newcastle.enterprisemiddleware.booking;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import uk.ac.newcastle.enterprisemiddleware.customer.Customer;
 import uk.ac.newcastle.enterprisemiddleware.hotel.Hotel;
+import uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -44,7 +46,6 @@ public class Booking implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="booking_id" )
     private Long bookingId;
 
     @ManyToOne()
@@ -62,6 +63,10 @@ public class Booking implements Serializable {
     @Column(name = "booking_date")
     @Temporal(TemporalType.DATE)
     private Date bookingDate;
+
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private TravelAgent travelAgent;
 
     public Long getBookingId() {
         return bookingId;
@@ -95,6 +100,14 @@ public class Booking implements Serializable {
         this.bookingDate = bookingDate;
     }
 
+    public TravelAgent getTravelAgent() {
+        return travelAgent;
+    }
+
+    public void setTravelAgent(TravelAgent travelAgent) {
+        this.travelAgent = travelAgent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,6 +120,7 @@ public class Booking implements Serializable {
     public int hashCode() {
         return Objects.hash(hotel, bookingDate);
     }
+
     @Override
     public String toString() {
         return "Booking{" +
@@ -114,6 +128,7 @@ public class Booking implements Serializable {
                 ", customer=" + customer +
                 ", hotel=" + hotel +
                 ", bookingDate=" + bookingDate +
+                ", travelAgent=" + travelAgent +
                 '}';
     }
 }

@@ -46,6 +46,11 @@ public class TravelAgentRestService {
     @RestClient
     TaxiBookingService taxiBookingService;
 
+    @Inject
+    @RestClient
+    FlightBookingService flightBookingService;
+
+
     /**
      * @description: Add a new TravelAgent to the database
      * @Param travelAgent:
@@ -54,55 +59,58 @@ public class TravelAgentRestService {
      * @create 2023/11/14
      */
 
-@POST
-@Operation(description = "Add a new TravelAgent to the database")
-@APIResponses(value = {
-        @APIResponse(responseCode = "201", description = "TravelAgent created successfully."),
-        @APIResponse(responseCode = "400", description = "Invalid TravelAgent supplied in request body"),
-        @APIResponse(responseCode = "409", description = "TravelAgent supplied in request body conflicts with an existing Customer"),
-        @APIResponse(responseCode = "500", description = "An unexpected error occurred whilst processing the request")
-})
-@Transactional
-public Response TravelAgent(
-        @Parameter(description = "JSON representation of TravelAgent object to be added to the database", required = true)
-        TravelAgent travelAgent) throws Exception {
-    Response.ResponseBuilder builder;
+    @POST
+    @Operation(description = "Add a new TravelAgent to the database")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "201", description = "TravelAgent created successfully."),
+            @APIResponse(responseCode = "400", description = "Invalid TravelAgent supplied in request body"),
+            @APIResponse(responseCode = "409", description = "TravelAgent supplied in request body conflicts with an existing Customer"),
+            @APIResponse(responseCode = "500", description = "An unexpected error occurred whilst processing the request")
+    })
+    @Transactional
+    public Response TravelAgent(
+            @Parameter(description = "JSON representation of TravelAgent object to be added to the database", required = true)
+            TravelAgent travelAgent) throws Exception {
+        Response.ResponseBuilder builder;
 
-    if (travelAgent == null) {
-        throw new RestServiceException("Bad Request", Response.Status.BAD_REQUEST);
+        if (travelAgent == null) {
+            throw new RestServiceException("Bad Request", Response.Status.BAD_REQUEST);
+        }
+
+        Long hotelBookingId =null;
+        Long taxiBookingId = null;
+        Long flightBookingId=null;
+
+        try {
+
+             hotelBookingId = travelAgentService.creatHotelBooking(travelAgent);
+            taxiBookingId = travelAgentService.creatTaxiBooking(travelAgent);
+             flightBookingId = travelAgentService.creatFlightBooking(travelAgent);
+            System.out.println("----------------"+hotelBookingId+"----------------------------");
+            travelAgent.setHotelBookingId(hotelBookingId);
+            travelAgent.setTaxiBookingId(taxiBookingId);
+            travelAgent.setFlightBookingId(flightBookingId);
+            TravelAgent travelAgent1 = travelAgentService.createTravelAgent(travelAgent);
+
+            builder = Response.status(Response.Status.CREATED).entity(travelAgent1);
+
+        } catch (Exception e) {
+            hotelBookingService.deleteBooking(hotelBookingId);
+            taxiBookingService.deleteBooking(taxiBookingId);
+            flightBookingService.deleteBooking(flightBookingId);
+            throw new RestServiceException(e);
+        }
+
+        logger.info("create travelAgent completed. TravelAgent = " + travelAgent);
+        return builder.build();
     }
-
-    try {
-
-        Long hotelBookingId = travelAgentService.creatHotelBooking(travelAgent);
-        Long taxiBookingId = travelAgentService.creatTaxiBooking(travelAgent);
-        //Long flightBookingId = travelAgentService.creatFlightBooking(travelAgent);
-        System.out.println("----------------"+hotelBookingId+"----------------------------");
-        travelAgent.setHotelBookingId(hotelBookingId);
-        travelAgent.setTaxiBookingId(taxiBookingId);
-        //travelAgent.setFlightBookingId(flightBookingId);
-        TravelAgent travelAgent1 = travelAgentService.createTravelAgent(travelAgent);
-
-        builder = Response.status(Response.Status.CREATED).entity(travelAgent);
-
-    } catch (Exception e) {
-        travelAgentService.deleteTravelAgent(travelAgent.getId());
-        hotelBookingService.deleteBooking(travelAgent.getId());
-        taxiBookingService.deleteBooking(travelAgent.getId());
-        //flightBookingService.deleteBooking(flightBookingId);
-        throw new RestServiceException(e);
-    }
-
-    logger.info("create travelAgent completed. TravelAgent = " + travelAgent);
-    return builder.build();
-}
-/**
- * @description: Delete a TravelAgent from the database
- * @Param id
- * @return javax.ws.rs.core.Response
- * @author Chang Liu
- * @create 2023/11/14
- */
+    /**
+     * @description: Delete a TravelAgent from the database
+     * @Param id
+     * @return javax.ws.rs.core.Response
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     @DELETE
     @Path("/{id:[0-9]+}")
@@ -118,7 +126,9 @@ public Response TravelAgent(
             @Parameter(description = "Id of TravelAgent to be deleted", required = true)
             @Schema(minimum = "0")
             @PathParam("id")
-                    Long id) {
+            Long id) {
+
+
         Response.ResponseBuilder builder;
         if (id == null || travelAgentService.findTravelAgentById(id) == null) {
             throw new RestServiceException("No TravelAgent with the id " + id + " was found!", Response.Status.NOT_FOUND);
@@ -129,7 +139,7 @@ public Response TravelAgent(
 
             hotelBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getHotelBookingId());
             taxiBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getTaxiBookingId());
-            //flightBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getFlightBookingId());
+            flightBookingService.deleteBooking(travelAgentService.findTravelAgentById(id).getFlightBookingId());
             builder = Response.noContent();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -138,12 +148,12 @@ public Response TravelAgent(
         return builder.build();
     }
 
-/**
- * @description: Fetch all TravelAgent
- * @return javax.ws.rs.core.Response
- * @author Chang Liu
- * @create 2023/11/14
- */
+    /**
+     * @description: Fetch all TravelAgent
+     * @return javax.ws.rs.core.Response
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     @GET
     @Operation(summary = "Fetch all TravelAgent", description = "Returns a JSON array of all stored TravelAgent objects.")

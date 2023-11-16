@@ -48,18 +48,18 @@ public class TravelAgentService {
     @RestClient
     TaxiBookingService taxiBookingService;
 
-//    @Inject
-//    @RestClient
-//    FlightBookingService flightBookingService;
+    @Inject
+    @RestClient
+    FlightBookingService flightBookingService;
 
 
-/**
- * @description find TravelAgent by Id
- * @Param id:
- * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
- * @author Chang Liu
- * @create 2023/11/13
- */
+    /**
+     * @description find TravelAgent by Id
+     * @Param id:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/13
+     */
 
     public TravelAgent findTravelAgentById(Long id){
         return  travelAgentRepository.findTravelAgentById(id);
@@ -90,13 +90,13 @@ public class TravelAgentService {
         return travelAgentRepository.createTravelAgent(travelAgent);
     }
 
-/**
- * @description
- * @Param travelAgent:
- * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
- * @author Chang Liu
- * @create 2023/11/14
- */
+    /**
+     * @description
+     * @Param travelAgent:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     public TravelAgent deleteTravelAgent(Long id) throws Exception {
         logger.info("deleteTravelAgent() - Deleting ");
@@ -169,27 +169,27 @@ public class TravelAgentService {
     }
 
 
-//    public Long creatFlightBooking(TravelAgent travelAgent) {
-//
-//        BookingVO bookingVO = new BookingVO();
-//        bookingVO.setFlightId(travelAgent.getTaxiId());
-//        bookingVO.setCustomerId(customerService.findById(travelAgent.getCustomerId()).getCustomerId());
-//        bookingVO.setBookingDate(travelAgent.getBookingDate());
-//        Long id ;
-//
-//        try {
-//            Response response =flightBookingService.createBooking(bookingVO);
-//            id = response.readEntity(BookingVO.class).getId();
-//
-//        } catch (ClientErrorException e) {
-//            if (e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
-//                throw new InvalidAreaCodeException("create flight booking fail", e);
-//            } else {
-//                throw e;
-//            }
-//        }
-//        return id;
-//    }
+    public Long creatFlightBooking(TravelAgent travelAgent) {
+
+        BookingVO bookingVO = new BookingVO();
+        bookingVO.setFlightId(travelAgent.getFlightId());
+        bookingVO.setCustomerId(travelAgent.getCustomerId());
+        bookingVO.setBookingDate(travelAgent.getBookingDate());
+        Long id ;
+
+        try {
+            Response response =flightBookingService.createBooking(bookingVO);
+            id = response.readEntity(BookingVO.class).getId();
+
+        } catch (ClientErrorException e) {
+            if (e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
+                throw new InvalidAreaCodeException("create flight booking fail", e);
+            } else {
+                throw e;
+            }
+        }
+        return id;
+    }
 
 
 

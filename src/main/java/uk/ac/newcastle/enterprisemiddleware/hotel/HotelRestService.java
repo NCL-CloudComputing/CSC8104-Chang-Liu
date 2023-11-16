@@ -53,6 +53,12 @@ public class HotelRestService {
     public Response retrieveAllHotels(@QueryParam("name") String name) {
         //Create an empty collection to contain the intersection of Hotels to be returned
         List<Hotel> hotels= hotelService.findAllOrderedByHotelName();
+        if(name == null){
+            hotels=hotelService.findAllOrderedByHotelName();
+        }
+        else{
+            hotels=hotelService.findAllByName(name);
+        }
         return Response.ok(hotels).build();
     }
     @GET

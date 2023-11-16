@@ -183,10 +183,10 @@ public class BookingRestService {
             booking.setId(null);
 
             // Go add the new Booking.
-            bookingService.createBooking(booking);
+            BookingVO bookingVO=bookingService.createBooking(booking);
 
             // Create a "Resource Created" 201 Response and pass the Booking back in case it is needed.
-            builder = Response.status(Response.Status.CREATED).entity(booking);
+            builder = Response.status(Response.Status.CREATED).entity(bookingVO);
 
 
         } catch (ConstraintViolationException ce) {

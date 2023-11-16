@@ -47,13 +47,13 @@ public class TravelAgentRepository {
         TypedQuery<TravelAgent> query = entityManager.createNamedQuery(TravelAgent.FIND_ALL_TRAVELAGENT, TravelAgent.class);
         return query.getResultList();
     }
-/**
- * @description: creat travel agent
- * @Param travelAgent:
- * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
- * @author Chang Liu
- * @create 2023/11/14
- */
+    /**
+     * @description: creat travel agent
+     * @Param travelAgent:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     TravelAgent createTravelAgent(TravelAgent travelAgent) throws Exception{
         logger.info("TravelAgentRepository.createTravelAgent() - Creating"+travelAgent.getId());
