@@ -31,6 +31,13 @@ public class CustomerService {
     public Customer findById(Long customerId) {
         return customerRepository.findById(customerId);
     }
+    List<Customer> findAllByFirstName(String firstName) {
+        return customerRepository.findAllByFirstName(firstName);
+    }
+
+    List<Customer> findAllByLastName(String lastName) {
+        return customerRepository.findAllByLastName(lastName);
+    }
 
     public Customer findByEmail(String customer_email){ return customerRepository.findByEmail(customer_email);}
     public Customer createCustomer(Customer customer) throws Exception

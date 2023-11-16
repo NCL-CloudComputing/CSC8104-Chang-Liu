@@ -28,7 +28,9 @@ public class HotelService {
     public List<Hotel> findAllOrderedByHotelName() {
         return hotelRepository.findAllByHotelName();
     }
-
+    public List<Hotel> findAllByName(String name){
+        return hotelRepository.findAllByName(name);
+    }
     public Hotel findById(Long hotelId) {
         return hotelRepository.findById(hotelId);
     }

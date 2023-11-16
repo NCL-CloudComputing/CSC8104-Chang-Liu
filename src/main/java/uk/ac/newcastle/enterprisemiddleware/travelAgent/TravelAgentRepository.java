@@ -23,14 +23,37 @@ public class TravelAgentRepository {
 
     @Inject
     EntityManager entityManager;
+
+    /**
+     * @description find travelAgent by id
+     * @Param id:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
+
     TravelAgent findTravelAgentById(Long id){
         return entityManager.find(TravelAgent.class,id);
     }
+
+    /**
+     * @description: find all travel agent
+     * @return java.util.List<uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent>
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     List<TravelAgent> findAllTravelAgent() {
         TypedQuery<TravelAgent> query = entityManager.createNamedQuery(TravelAgent.FIND_ALL_TRAVELAGENT, TravelAgent.class);
         return query.getResultList();
     }
+    /**
+     * @description: creat travel agent
+     * @Param travelAgent:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     TravelAgent createTravelAgent(TravelAgent travelAgent) throws Exception{
         logger.info("TravelAgentRepository.createTravelAgent() - Creating"+travelAgent.getId());
@@ -39,6 +62,14 @@ public class TravelAgentRepository {
 
         return travelAgent;
     }
+
+    /**
+     * @description: delete travel agent
+     * @Param travelAgent:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     TravelAgent deleteTravelAgent(TravelAgent travelAgent) throws Exception {
         logger.info("TravelAgentRepository.deleteTravelAgent() - Deleting " + travelAgent.getId());

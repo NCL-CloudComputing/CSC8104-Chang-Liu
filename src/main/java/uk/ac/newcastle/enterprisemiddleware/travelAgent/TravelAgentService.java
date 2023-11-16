@@ -24,6 +24,7 @@ import static io.vertx.codegen.CodeGenProcessor.log;
  * @author: CHANG LIU
  * @create: 2023-11-13 16:57
  **/
+@SuppressWarnings("all")
 @Dependent
 public class TravelAgentService {
 
@@ -42,13 +43,23 @@ public class TravelAgentService {
     @Inject
     @RestClient
     HotelBookingService hotelBookingService;
-/**
- * @description find TravelAgent by Id
- * @Param id:
- * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
- * @author Chang Liu
- * @create 2023/11/13
- */
+
+    @Inject
+    @RestClient
+    TaxiBookingService taxiBookingService;
+
+    @Inject
+    @RestClient
+    FlightBookingService flightBookingService;
+
+
+    /**
+     * @description find TravelAgent by Id
+     * @Param id:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/13
+     */
 
     public TravelAgent findTravelAgentById(Long id){
         return  travelAgentRepository.findTravelAgentById(id);
@@ -79,13 +90,13 @@ public class TravelAgentService {
         return travelAgentRepository.createTravelAgent(travelAgent);
     }
 
-/**
- * @description
- * @Param travelAgent:
- * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
- * @author Chang Liu
- * @create 2023/11/14
- */
+    /**
+     * @description
+     * @Param travelAgent:
+     * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     public TravelAgent deleteTravelAgent(Long id) throws Exception {
         logger.info("deleteTravelAgent() - Deleting ");
@@ -93,9 +104,17 @@ public class TravelAgentService {
         if(travelAgentRepository.findTravelAgentById(id)==null){
             throw new RestServiceException("No TravelAgent ID"+id+"was found");
         }
-        return travelAgentRepository.findTravelAgentById(id);
+        return travelAgentRepository.deleteTravelAgent(travelAgentRepository.findTravelAgentById(id));
 
     }
+
+    /**
+     * @description :creat a  hotel booking
+     * @Param travelAgent:
+     * @return java.lang.Long
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
 
     public Long creatHotelBooking(TravelAgent travelAgent) {
 
@@ -119,6 +138,58 @@ public class TravelAgentService {
         return id;
     }
 
+    /**
+     * @description: creat a taxi booking
+     * @Param travelAgent:
+     * @return java.lang.Long
+     * @author Chang Liu
+     * @create 2023/11/14
+     */
+
+    public Long creatTaxiBooking(TravelAgent travelAgent) {
+
+        BookingVO bookingVO = new BookingVO();
+        bookingVO.setTaxiId(travelAgent.getTaxiId());
+        bookingVO.setCustomerId(customerService.findById(travelAgent.getCustomerId()).getCustomerId());
+        bookingVO.setBookingDate(travelAgent.getBookingDate());
+        Long id ;
+
+        try {
+            Response response =taxiBookingService.createBooking(bookingVO);
+            id = response.readEntity(BookingVO.class).getId();
+
+        } catch (ClientErrorException e) {
+            if (e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
+                throw new InvalidAreaCodeException("create taxi booking fail", e);
+            } else {
+                throw e;
+            }
+        }
+        return id;
+    }
+
+
+    public Long creatFlightBooking(TravelAgent travelAgent) {
+
+        BookingVO bookingVO = new BookingVO();
+        bookingVO.setFlightId(travelAgent.getFlightId());
+        bookingVO.setCustomerId(travelAgent.getCustomerId());
+        bookingVO.setBookingDate(travelAgent.getBookingDate());
+        Long id ;
+
+        try {
+            Response response =flightBookingService.createBooking(bookingVO);
+            id = response.readEntity(BookingVO.class).getId();
+
+        } catch (ClientErrorException e) {
+            if (e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
+                throw new InvalidAreaCodeException("create flight booking fail", e);
+            } else {
+                throw e;
+            }
+        }
+        return id;
+    }
 
 
 

@@ -80,8 +80,8 @@ public class BookingVO {
     }
 
     public BookingVO(Booking booking) {
-        this.id = id;
-        this.customerId = booking.getBookingId();
+        this.id = booking.getBookingId();
+        this.customerId = booking.getCustomer().getCustomerId();
         this.hotelId = booking.getHotel().getHotelId();
         this.bookingDate = booking.getBookingDate();
     }

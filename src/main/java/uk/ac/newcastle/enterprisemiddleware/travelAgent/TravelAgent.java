@@ -64,6 +64,10 @@ public class TravelAgent implements Serializable {
     @JsonIgnore
     private Long hotelBookingId;
 
+    @OneToOne(cascade =CascadeType.REMOVE)
+    @JoinColumn(name="booking_id",referencedColumnName = "bookingId")
+    @JsonIgnore
+    private Booking booking;
 
     @NotNull
     @Column(name = "booking_date")
@@ -141,6 +145,14 @@ public class TravelAgent implements Serializable {
 
     public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     @Override

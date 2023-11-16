@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,6 +40,26 @@ public class CustomerRepository {
         TypedQuery<Customer> query = em.createNamedQuery(Customer.FIND_ALL, Customer.class);
         return query.getResultList();
     }
+    List<Customer> findAllByFirstName(String firstName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Customer> criteria = cb.createQuery(Customer.class);
+        Root<Customer> customer = criteria.from(Customer.class);
+        // Swap criteria statements if you would like to try out type-safe criteria queries, a new feature in JPA 2.0.
+        // criteria.select(contact).where(cb.equal(contact.get(Contact_.firstName), firstName));
+        criteria.select(customer).where(cb.equal(customer.get("firstName"), firstName));
+        return em.createQuery(criteria).getResultList();
+    }
+
+    List<Customer> findAllByLastName(String lastName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Customer> criteria = cb.createQuery(Customer.class);
+        Root<Customer> customer = criteria.from(Customer.class);
+        // Swap criteria statements if you would like to try out type-safe criteria queries, a new feature in JPA 2.0.
+        // criteria.select(contact).where(cb.equal(contact.get(Contact_.lastName), lastName));
+        criteria.select(customer).where(cb.equal(customer.get("lastName"), lastName));
+        return em.createQuery(criteria).getResultList();
+    }
+
 
     /**
      * @description

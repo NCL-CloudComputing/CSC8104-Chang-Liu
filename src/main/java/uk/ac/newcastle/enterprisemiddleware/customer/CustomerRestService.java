@@ -47,7 +47,17 @@ public class CustomerRestService {
         //Create an empty collection to contain the intersection of Customers to be returned
         List<Customer> customers;
 
-        customers = customerService.findAllOrderedByName();
+        if(firstname == null && lastname == null) {
+            customers = customerService.findAllOrderedByName();
+        } else if(lastname == null) {
+            customers = customerService.findAllByFirstName(firstname);
+        } else if(firstname == null) {
+            customers = customerService.findAllByLastName(lastname);
+        } else {
+            customers = customerService.findAllByFirstName(firstname);
+            customers.retainAll(customerService.findAllByLastName(lastname));
+        }
+
 
         return Response.ok(customers).build();
 
