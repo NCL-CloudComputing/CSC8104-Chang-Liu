@@ -66,7 +66,7 @@ public class BookingRestService {
 
     @GET
     @Operation(summary = "Fetch all Bookings", description = "Returns a JSON array of all stored Contact objects.")
-    public Response retrieveAllContacts() {
+    public Response retrieveAllBookings() {
         //Create an empty collection to contain the intersection of Contacts to be returned
         List<Booking> bookingList;
 
@@ -75,7 +75,7 @@ public class BookingRestService {
         return Response.ok(bookingList).build();
     }
     /**
-     * @description:通过customerId找这个人的预定信息list
+     * @description: find booking List by customer Id
      * @Param id:
      * @return javax.ws.rs.core.Response
      * @author Chang Liu
@@ -85,7 +85,7 @@ public class BookingRestService {
     @Cache
     @Path("/customer/{id:[0-9]+}")
     @Operation(
-            summary = "Fetch a Booking by id",
+            summary = "Fetch a Booking by customer id",
             description = "Returns a JSON representation of the Booking object with the provided id."
     )
     @APIResponses(value = {

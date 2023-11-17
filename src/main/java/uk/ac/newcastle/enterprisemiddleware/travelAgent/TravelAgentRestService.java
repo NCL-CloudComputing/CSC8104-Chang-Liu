@@ -83,7 +83,7 @@ public class TravelAgentRestService {
 
         try {
 
-             hotelBookingId = travelAgentService.creatHotelBooking(travelAgent);
+            hotelBookingId = travelAgentService.creatHotelBooking(travelAgent);
             taxiBookingId = travelAgentService.creatTaxiBooking(travelAgent);
              flightBookingId = travelAgentService.creatFlightBooking(travelAgent);
             System.out.println("----------------"+hotelBookingId+"----------------------------");
