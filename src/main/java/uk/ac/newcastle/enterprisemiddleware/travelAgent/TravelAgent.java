@@ -155,18 +155,4 @@ public class TravelAgent implements Serializable {
         this.booking = booking;
     }
 
-    @Override
-    public String toString() {
-        return "TravelAgent{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", taxiId=" + taxiId +
-                ", flightId=" + flightId +
-                ", hotelid=" + hotelid +
-                ", taxiBookingId=" + taxiBookingId +
-                ", flightBookingId=" + flightBookingId +
-                ", hotelBookingId=" + hotelBookingId +
-                ", bookingDate=" + bookingDate +
-                '}';
-    }
 }

@@ -121,14 +121,5 @@ public class Booking implements Serializable {
         return Objects.hash(hotel, bookingDate);
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", customer=" + customer +
-                ", hotel=" + hotel +
-                ", bookingDate=" + bookingDate +
-                ", travelAgent=" + travelAgent +
-                '}';
-    }
+
 }
