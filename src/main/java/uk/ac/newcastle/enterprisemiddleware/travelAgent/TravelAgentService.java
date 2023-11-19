@@ -77,7 +77,7 @@ public class TravelAgentService {
     }
 
     /**
-     * @description
+     * @description creat travel agent
      * @Param travelAgent:
      * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
      * @author Chang Liu
@@ -91,7 +91,7 @@ public class TravelAgentService {
     }
 
     /**
-     * @description
+     * @description: delete travelAgent
      * @Param travelAgent:
      * @return uk.ac.newcastle.enterprisemiddleware.travelAgent.TravelAgent
      * @author Chang Liu

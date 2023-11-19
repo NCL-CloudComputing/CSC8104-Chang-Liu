@@ -58,7 +58,7 @@ public class TravelAgentRepository {
     TravelAgent createTravelAgent(TravelAgent travelAgent) throws Exception{
         logger.info("TravelAgentRepository.createTravelAgent() - Creating"+travelAgent.getId());
 
-        entityManager.merge(travelAgent);
+        entityManager.persist(travelAgent);
 
         return travelAgent;
     }

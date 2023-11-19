@@ -103,17 +103,15 @@ public class BookingService {
      */
     public BookingVO createBooking(BookingVO booking) throws Exception {
         log.info("HotelBookingService.createBooking() - Creating " + booking.getHotelId() + " " + booking.getCustomerId());
-
         Long customerId = booking.getCustomerId();
         Customer customer = customerService.findById(customerId);
-
         Long hotelId=booking.getHotelId();
         Hotel hotel=hotelService.findById(hotelId);
         Date bookingDate = booking.getBookingDate();
         Booking booking1=new Booking();
-        booking1.setBookingDate(bookingDate);
-        booking1.setHotel(hotel);
         booking1.setCustomer(customer);
+        booking1.setHotel(hotel);
+        booking1.setBookingDate(bookingDate);
         System.out.println(booking1);
 
 

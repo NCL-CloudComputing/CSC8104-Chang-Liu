@@ -56,10 +56,7 @@ public class BookingRestServiceTest {
     }
     @BeforeAll
     static void setupBooking() {
-
-
         bookingVo = new BookingVO();
-
         bookingVo.setCustomerId(1L);
         bookingVo.setHotelId(1L);
         Calendar calendar = Calendar.getInstance();

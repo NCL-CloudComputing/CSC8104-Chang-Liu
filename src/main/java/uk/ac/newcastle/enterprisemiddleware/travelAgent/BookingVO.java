@@ -86,15 +86,5 @@ public class BookingVO {
         this.bookingDate = booking.getBookingDate();
     }
 
-    @Override
-    public String toString() {
-        return "BookingVO{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", hotelId=" + hotelId +
-                ", bookingDate=" + bookingDate +
-                ", taxiId=" + taxiId +
-                ", flightId=" + flightId +
-                '}';
-    }
+
 }

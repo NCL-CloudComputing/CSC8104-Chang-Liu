@@ -23,6 +23,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("all")
 @QuarkusTest
 @TestHTTPEndpoint(TravelAgentRestService.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -61,34 +62,34 @@ public class TravelAgentRestServiceTest {
         travelAgent.setTaxiId(1L);
         travelAgent.setFlightId(1L);
         travelAgent.setCustomerId(1L);
-        travelAgent.setBookingDate(new Date(2028,12,11));
-
+        travelAgent.setBookingDate(new Date(2024,12,3));
     }
     @Test
     @Transactional
     @Order(1)
     public void testCreateCustomer() throws Exception {
-        Customer customer1 = customerService.createCustomer(customer);
-        System.out.println(customer1);
+        Customer customer1 = customerService.createCustomer(TravelAgentRestServiceTest.customer);
+        System.out.println(customer1.toString());
     }
     @Test
     @Transactional
     @Order(2)
     public void testCreateHotel() throws Exception {
-        Hotel hotel1 = hotelService.createHotel(hotel);
-        System.out.println(hotel1);
+        Hotel hotel1 = hotelService.createHotel(TravelAgentRestServiceTest.hotel);
+        System.out.println(hotel1.toString());
 
     }
     @Test
     @Order(3)
     public void testCreateTravelAgent() {
+        travelAgent.setHotelBookingId(1L);
         given().
-                when().
                 contentType(ContentType.JSON).
-                body(travelAgent).
-                post().
-                then().
-                statusCode(201);
+                body(travelAgent)
+                .when()
+                .post()
+                .then()
+                .statusCode(201);
     }
 
 

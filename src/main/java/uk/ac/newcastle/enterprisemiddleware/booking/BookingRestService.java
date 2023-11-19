@@ -179,10 +179,7 @@ public class BookingRestService {
         Response.ResponseBuilder builder;
 
         try {
-            // Clear the ID if accidentally set
             booking.setId(null);
-
-            // Go add the new Booking.
             BookingVO bookingVO=bookingService.createBooking(booking);
 
             // Create a "Resource Created" 201 Response and pass the Booking back in case it is needed.

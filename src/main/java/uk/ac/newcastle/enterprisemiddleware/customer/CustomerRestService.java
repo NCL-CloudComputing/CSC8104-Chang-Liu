@@ -58,7 +58,6 @@ public class CustomerRestService {
             customers.retainAll(customerService.findAllByLastName(lastname));
         }
 
-
         return Response.ok(customers).build();
 
     }
